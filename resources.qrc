@@ -1,0 +1,37 @@
+﻿<RCC>
+    <qresource prefix="/">
+        <file>Icons/MainWindow/profileBtnOff.svg</file>
+        <file>Icons/MainWindow/profileBtnOn.svg</file>
+        <file>Icons/MainWindow/settingsBtn.svg</file>
+        <file>Icons/MainWindow/exitBtn.svg</file>
+        <file>Icons/MainWindow/discordBtn.svg</file>
+		
+        <file>Icons/LoginWindow/profileBtn.svg</file>
+        <file>Icons/LoginWindow/passwordEditOpen.svg</file>
+        <file>Icons/LoginWindow/passwordEditClose.svg</file>
+        <file>Icons/LoginWindow/rememberMe.svg</file>
+		
+        <file>Icons/RegisterWindow/registerBtn.svg</file>
+        <file>Icons/RegisterWindow/passwordEditOpen.svg</file>
+        <file>Icons/RegisterWindow/passwordEditClose.svg</file>
+		
+        <file>Icons/AuctionWindow/allitems.svg</file>
+        <file>Icons/AuctionWindow/armor.svg</file>
+        <file>Icons/AuctionWindow/artifacts.svg</file>
+        <file>Icons/AuctionWindow/attachments.svg</file>
+        <file>Icons/AuctionWindow/back.svg</file>
+        <file>Icons/AuctionWindow/consumables.svg</file>
+        <file>Icons/AuctionWindow/cosmetic.svg</file>
+        <file>Icons/AuctionWindow/craft.svg</file>
+        <file>Icons/AuctionWindow/favoriteoff.svg</file>
+        <file>Icons/AuctionWindow/favoriteon.svg</file>
+        <file>Icons/AuctionWindow/gun.svg</file>
+        <file>Icons/AuctionWindow/listclose.svg</file>
+        <file>Icons/AuctionWindow/listopen.svg</file>
+        <file>Icons/AuctionWindow/medicine.svg</file>
+        <file>Icons/AuctionWindow/other.svg</file>
+        <file>Icons/AuctionWindow/recent.svg</file>
+        <file>Icons/AuctionWindow/reset.svg</file>
+        <file>Icons/AuctionWindow/search.svg</file>
+    </qresource>
+</RCC>

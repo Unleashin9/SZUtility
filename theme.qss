@@ -1,0 +1,509 @@
+﻿/* ========================================================= */
+/* === СТРУКТУРА ФАЙЛА ===                                   */
+/*   1. Палитра (справочник)                                 */
+/*   2. Глобальные настройки                                 */
+/*   3. MainWindow                                           */
+/*   4. LoginWindow                                          */
+/*   5. RegisterWindow                                       */
+/*   6. SettingsWindow                                       */
+/*   7. AuctionWindow                                        */
+/* ========================================================= */
+
+/* ========================================================= */
+/* === 1. ПАЛИТРА (справочник) ===                           */
+/*                                                           */
+/*   ФОН И ПОВЕРХНОСТИ                                       */
+/*     #1E1E1E ........ фон окна / основной                  */
+/*     #252525 ........ alternate-row (чётные строки таблицы)*/
+/*     #2D2D2D ........ поля ввода, меню, карточки           */
+/*     #333333 ........ hover карточек (#itemCard:hover)     */
+/*                                                           */
+/*   ТЕКСТ И РАМКИ                                           */
+/*     #FFFFFF ........ основной текст                       */
+/*     #9CA3AF ........ приглушённый (подписи, hint)         */
+/*     #4B5563 ........ рамки, разделители                   */
+/*                                                           */
+/*   АКЦЕНТ (лайм)                                           */
+/*     #A3E635 ........ основной акцент                      */
+/*     #BEF264 ........ hover                                */
+/*     #84CC16 ........ pressed                              */
+/*                                                           */
+/*   ОПАСНОСТЬ (красный)                                     */
+/*     #F87171 ........ основной                             */
+/*     #FCA5A5 ........ hover                                */
+/*     #EF4444 ........ pressed                              */
+/*                                                           */
+/*   БРЕНДЫ                                                  */
+/*     #5865F2 ........ Discord                              */
+/*     #7983F5 ........ Discord hover                        */
+/*     #4752C4 ........ Discord pressed                      */
+/* ========================================================= */
+
+/* ========================================================= */
+/* === 2. ГЛОБАЛЬНЫЕ НАСТРОЙКИ ===                           */
+/*                                                           */
+/*   Базовые стили, действующие на все окна приложения.      */
+/*   Здесь — только то, что не привязано к конкретному окну: */
+/*   дефолтный вид виджетов и правила-«заготовки».           */
+/* ========================================================= */
+
+/* Базовый стиль всех виджетов: фон, цвет, шрифт.
+   Наследуется всем, у чего нет более специфичного правила. */
+QWidget {
+    background-color: #1E1E1E;
+    color: #FFFFFF;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 14px;
+}
+
+/* Подписи прозрачные — иначе QLabel внутри кнопок/панелей
+   рисуется прямоугольником цвета #1E1E1E поверх родителя. */
+QLabel {
+    background-color: transparent;
+}
+
+/* Top-level окна прозрачные: фон и скруглённые углы рисуют
+   их внутренние контейнеры (#mainContainer, #dialogContainer).
+   Без этого не работают border-radius у диалогов — окно
+   закрашивает фон раньше, чем контейнер скруглит. */
+QMainWindow, QDialog {
+    background-color: transparent;
+}
+
+/* Базовая кнопка-«акцент»: используется как fallback для любой
+   QPushButton, у которой нет своего #objectName. Окна могут
+   переопределить через #windowRoot #name (см. секции 3–7). */
+QPushButton {
+    background-color: #A3E635;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    padding: 0px 16px;
+    font-weight: bold;
+}
+QPushButton:hover    { background-color: #BEF264; }
+QPushButton:pressed  { background-color: #84CC16; }
+QPushButton:disabled {
+    background-color: #4B5563;
+    color: #9CA3AF;
+}
+
+/* ========================================================= */
+/* === 3. MAINWINDOW ===                                     */
+/*                                                           */
+/*   Все ID уникальны для этого окна — ancestor-скоупинг     */
+/*   не нужен. Фон рисует #mainContainer (см. секцию 2).     */
+/* ========================================================= */
+
+/* Корневой контейнер: фон, без рамки и скруглений — окно
+   на весь экран, рамка тут неуместна. */
+#mainContainer {
+    background-color: #1E1E1E;
+    border: none;
+    border-radius: 0px;
+}
+
+/* Заголовок и подзаголовок */
+#mainTitle {
+    font-size: 32pt;
+    font-weight: bold;
+    color: #A3E635;
+}
+#mainSubtitle {
+    font-size: 18pt;
+    color: #FFFFFF;
+}
+
+/* Кнопки шапки */
+#profileButton, #settingsButton {
+    background-color: #A3E635;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+#profileButton {
+    text-align: left;
+    padding-left: 15px;
+}
+#settingsButton {
+    text-align: center;
+    padding: 0px;
+}
+
+/* Выход — опасное действие, красный */
+#exitButton {
+    background-color: #F87171;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    padding: 0px;
+}
+#exitButton:hover   { background-color: #FCA5A5; }
+#exitButton:pressed { background-color: #EF4444; }
+
+/* Discord — бренд, синий */
+#discordButton {
+    background-color: #5865F2;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 0px;
+}
+#discordButton:hover   { background-color: #7983F5; }
+#discordButton:pressed { background-color: #4752C4; }
+
+/* Главная CTA-кнопка «АУКЦИОН» */
+#auctionButton {
+    background-color: #A3E635;
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 0px;
+}
+#auctionButton:hover   { background-color: #BEF264; }
+#auctionButton:pressed { background-color: #84CC16; }
+
+/* ========================================================= */
+/* === 4. LOGINWINDOW ===                                    */
+/*                                                           */
+/*   Здесь — общие стили диалогов: Login/Register/Settings   */
+/*   используют один #dialogContainer. Скоупинг через        */
+/*   #dialogContainer, чтобы не перекрашивать кнопки в       */
+/*   #auctionWindow (там свой корень #auctionWindow).        */
+/*                                                           */
+/*   Если понадобится разный стиль в Login vs Register —     */
+/*   добавь setObjectName на корень QDialog и скоупь по      */
+/*   #loginWindow / #registerWindow.                         */
+/* ========================================================= */
+
+/* Карточка диалога: фон, скруглённые углы, тонкая рамка.
+   QDialog (top-level) прозрачен (см. секцию 2), фон рисует
+   именно #dialogContainer — иначе не работают скругления. */
+#dialogContainer {
+    background-color: #1E1E1E;
+    border-radius: 15px;
+    border: 1px solid #4B5563;
+}
+
+/* Заголовок и подзаголовок формы */
+#dialogContainer #loginTitle {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+#dialogContainer #loginSubtitle {
+    font-size: 14px;
+    color: #9CA3AF;
+}
+
+/* Серые подписи над полями («ЛОГИН», «ПАРОЛЬ», ...) */
+#dialogContainer #inputLabel {
+    font-size: 12px;
+    font-weight: bold;
+    color: #9CA3AF;
+}
+
+/* Горизонтальный разделитель между секциями формы */
+#dialogContainer #dividerLine {
+    color: #4B5563;
+    background-color: #4B5563;
+    max-height: 1px;
+    border: none;
+}
+
+/* Кнопка-ссылка («Забыли пароль?») — только в LoginWindow */
+#dialogContainer #linkButton {
+    background-color: transparent;
+    color: #A3E635;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    padding: 0px;
+}
+#dialogContainer #linkButton:hover {
+    text-decoration: underline;
+    color: #BEF264;
+}
+
+/* Главная кнопка формы («ВОЙТИ», «СОЗДАТЬ АККАУНТ»)
+   Акцентный фон — совпадает с базовым QPushButton,
+   но крупнее шрифт и явное скругление 8. */
+#dialogContainer #loginSubmitBtn {
+    background-color: #A3E635;
+    color: #000000;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 8px;
+}
+#dialogContainer #loginSubmitBtn:hover   { background-color: #BEF264; }
+#dialogContainer #loginSubmitBtn:pressed { background-color: #84CC16; }
+
+/* Контурная кнопка («Создать аккаунт», «Войти») — общая
+   для Login и Register. Для AuctionWindow — свой стиль
+   (см. секцию 7, другой корень — не конфликтует). */
+#dialogContainer #outlineButton {
+    background-color: transparent;
+    border: 1px solid #A3E635;
+    color: #A3E635;
+    border-radius: 6px;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 12px;
+}
+#dialogContainer #outlineButton:hover   { background-color: rgba(163, 230, 53, 0.1); }
+#dialogContainer #outlineButton:pressed { background-color: rgba(163, 230, 53, 0.2); }
+
+/* Крестик в углу диалога */
+#dialogContainer #closeDialogBtn {
+    background-color: transparent;
+    color: #EF4444;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+}
+#dialogContainer #closeDialogBtn:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #F87171;
+}
+
+/* Поля ввода — только в диалогах. В AuctionWindow полей
+   пока нет; когда появятся — заскоупишь отдельно. */
+#dialogContainer QLineEdit {
+    background-color: #2D2D2D;
+    color: #FFFFFF;
+    border: 1px solid #4B5563;
+    border-radius: 6px;
+    padding: 8px;
+}
+#dialogContainer QLineEdit:focus {
+    border: 1px solid #A3E635;
+}
+
+/* «Глазик» внутри поля пароля — QToolButton, добавленный
+   через QLineEdit::addAction(…, TrailingPosition). */
+#dialogContainer QLineEdit QToolButton {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    margin: 0px 5px 0px 0px;
+}
+#dialogContainer QLineEdit QToolButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+/* Чекбокс «Запомнить меня» + лаймовая галочка через inline SVG
+   (в QSS нет внешних файлов — data:image/svg+xml). */
+#dialogContainer QCheckBox {
+    color: #FFFFFF;
+    font-size: 13px;
+    spacing: 8px;
+}
+#dialogContainer QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #4B5563;
+    border-radius: 4px;
+    background-color: transparent;
+}
+#dialogContainer QCheckBox::indicator:hover {
+    border: 1px solid #A3E635;
+}
+#dialogContainer QCheckBox::indicator:checked {
+    background-color: transparent;
+    border: 1px solid #4B5563;
+    image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A3E635' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'></polyline></svg>");
+}
+
+/* ========================================================= */
+/* === 7. AUCTIONWINDOW ===                                  */
+/*                                                           */
+/*   Корень — #auctionWindow (setObjectName в конструкторе). */
+/*   Все правила скоупим через него — единый стиль           */
+/*   независимо от того, общий ID или уникальный.           */
+/*                                                           */
+/*   Попапы (QMenu, QMessageBox, QComboBox-попап) —          */
+/*   top-level, скоуп на них НЕ действует, см. глобальные    */
+/*   правила QMenu / QMessageBox / QListView ниже.           */
+/* ========================================================= */
+
+/* Шапка: breadcrumb-заголовок */
+#auctionWindow #auctionHeaderTitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: #A3E635;
+}
+
+/* Кнопка «На главную» — красная, опасное действие (выход) */
+#auctionWindow #backButton {
+    background-color: #F87171;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0px;
+}
+#auctionWindow #backButton:hover   { background-color: #FCA5A5; }
+#auctionWindow #backButton:pressed { background-color: #EF4444; }
+
+/* Панель-карточка «Быстрый доступ» и заголовок внутри неё */
+#auctionWindow #auctionPanel {
+    background-color: #1E1E1E;
+    border: 1px solid #4B5563;
+    border-radius: 12px;
+}
+#auctionWindow #panelTitle {
+    font-size: 12px;
+    font-weight: bold;
+    color: #9CA3AF;
+}
+
+/* Контурная кнопка — свой стиль, отдельный от диалогов
+   (см. секцию 4, #dialogContainer #outlineButton). Специфичность
+   одинаковая, но предки разные — конфликта нет. */
+/* Кнопки быстрого доступа — tab-подобные.
+   По умолчанию: прозрачный фон, белый текст, левая полоса
+   невидимая (transparent) — чтобы при :checked ширина не прыгала. */
+#auctionWindow #outlineButton {
+    background-color: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: #FFFFFF;
+    padding: 5px 15px 5px 10px;
+    font-weight: normal;
+    font-size: 13px;
+    text-align: left;
+}
+#auctionWindow #outlineButton:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+#auctionWindow #outlineButton:checked {
+    background-color: rgba(163, 230, 53, 0.1);
+    border-left: 3px solid #A3E635;
+    color: #A3E635;
+    font-weight: bold;
+}
+#auctionWindow #outlineButton:checked:hover {
+    background-color: rgba(163, 230, 53, 0.15);
+}
+
+/* Кнопка навигации по категориям (radio-like): фон прозрачный,
+   активное состояние — :checked. Обновляется кодом через
+   setCheckable(true) / setChecked(true). */
+#auctionWindow #navButton {
+    background-color: transparent;
+    color: #FFFFFF;
+    text-align: left;
+    padding: 0px 12px;
+    border-radius: 6px;
+    font-weight: normal;
+}
+#auctionWindow #navButton:hover   { background-color: rgba(255, 255, 255, 0.06); }
+#auctionWindow #navButton:checked {
+    background-color: rgba(163, 230, 53, 0.15);
+    color: #A3E635;
+    font-weight: bold;
+}
+
+/* Счётчик справа на кнопке навигации. Child-селектор срабатывает
+   только если #navCount — реальный дочерний виджет #navButton
+   (а не просто элемент внутри layout'а кнопки). */
+#auctionWindow #navCount {
+    font-size: 12px;
+    color: #9CA3AF;
+}
+#auctionWindow #navButton:checked #navCount { color: #A3E635; }
+
+/* «Сбросить фильтры» — контурная, спокойная */
+#auctionWindow #resetButton {
+    background-color: transparent;
+    border: 1px solid #4B5563;
+    color: #9CA3AF;
+    padding: 0px 16px;
+}
+#auctionWindow #resetButton:hover {
+    border: 1px solid #A3E635;
+    color: #A3E635;
+    background-color: transparent;
+}
+#auctionWindow #resetButton:pressed { background-color: rgba(163, 230, 53, 0.1); }
+
+/* Строка статуса над таблицей. error=true ставится кодом через
+   setProperty("error", true) + unpolish/polish. */
+#auctionWindow #statusLabel {
+    font-size: 13px;
+    color: #9CA3AF;
+    padding-bottom: 8px;
+}
+#auctionWindow #statusLabel[error="true"] { color: #F87171; }
+
+/* Выпадающие списки фильтров (ранг, сортировка) */
+#auctionWindow QComboBox {
+    background-color: #2D2D2D;
+    color: #FFFFFF;
+    border: 1px solid #4B5563;
+    border-radius: 6px;
+    padding: 8px 12px;
+    min-width: 200px;
+}
+#auctionWindow QComboBox:focus      { border: 1px solid #A3E635; }
+#auctionWindow QComboBox::drop-down { border: none; width: 24px; }
+
+/* Таблица лотов */
+#auctionWindow QTableView {
+    background-color: #1E1E1E;
+    alternate-background-color: #252525;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    gridline-color: transparent;
+    selection-background-color: rgba(163, 230, 53, 0.25);
+    selection-color: #FFFFFF;
+    outline: none;
+}
+#auctionWindow QTableView::item { padding: 6px 10px; border: none; }
+
+/* Заголовки колонок таблицы */
+#auctionWindow QHeaderView::section {
+    background-color: #2D2D2D;
+    color: #9CA3AF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 8px 10px;
+    border: none;
+    border-bottom: 1px solid #4B5563;
+}
+
+/* Вертикальный скроллбар таблицы — тонкий, лаймовый на hover */
+#auctionWindow QScrollBar:vertical {
+    background: transparent;
+    width: 10px;
+    margin: 0;
+}
+#auctionWindow QScrollBar::handle:vertical {
+    background: #4B5563;
+    border-radius: 5px;
+    min-height: 24px;
+}
+#auctionWindow QScrollBar::handle:vertical:hover { background: #A3E635; }
+#auctionWindow QScrollBar::add-line:vertical,
+#auctionWindow QScrollBar::sub-line:vertical { height: 0; }
+
+/* Карточки предметов в сетке */
+#auctionWindow #itemCard {
+    background-color: #2D2D2D;
+    border: 1px solid #4B5563;
+    border-radius: 10px;
+}
+#auctionWindow #itemCard:hover {
+    border: 1px solid #A3E635;
+    background-color: #333333;
+}
